@@ -69,4 +69,21 @@ router.patch('/:id/complete', (req, res) => {
   res.json(task);
 });
 
+router.patch('/:id/assign', (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.body;
+
+  const result = taskService.assignTask(id, userId);
+
+  if (result === null) {
+    return res.status(404).json({ error: "Task not found" });
+  }
+
+  if (result === "INVALID_USER") {
+    return res.status(400).json({ error: "Invalid userId" });
+  }
+
+  res.json(result);
+});
+
 module.exports = router;
